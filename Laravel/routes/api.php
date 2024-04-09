@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/people', [PersonController::class, 'getInfo']);
 Route::get('/posts', [PostController::class, 'getPost']);
+
+Route::resource('students', StudentController::class);
+Route::get('/students', [StudentController::class, 'index']);

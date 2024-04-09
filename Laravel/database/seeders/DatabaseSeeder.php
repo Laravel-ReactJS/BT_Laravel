@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Person;
 use App\Models\Post;
+use App\Models\Student;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -23,7 +24,10 @@ class DatabaseSeeder extends Seeder
         // $this->call(PersonsTableSeeder::class);
         // Person::factory(20)->create();
 
-        $this->call(PostsTableSeeder::class);
-        Post::factory(10)->create();
+        // $this->call(PostsTableSeeder::class);
+        // Post::factory(10)->create();
+
+        $this->call(StudentsTableSeeder::class);
+        Student::factory(25)->create();
     }
 }
