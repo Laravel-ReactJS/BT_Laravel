@@ -68,24 +68,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'name' => 'string|required|min:3|max:15',
-            'email' => 'string|required|unique:users|email',
-            'password' => 'string|required',
-        ];
-        $messages = [
-            'name.required' => 'Tên là trường bắt buộc.',
-            'name.string' => 'Tên phải nhập kiểu chuỗi.',
-            'name.min' => 'Tên phải chứa ít nhất 3 ký tự.',
-            'name.max' => 'Tên không được vượt quá 15 ký tự.',
-            'email.required' => 'Email là trường bắt buộc.',
-            'email.string' => 'Email phải nhập kiểu chuỗi.',
-            'email.unique' => 'Email đã tồn tại',
-            'email.email' => 'Email phải đúng định dạng',
-            'password.required' => 'Mật khẩu là trường bắt buộc.',
-            'password.string' => 'Mật khẩu phải nhập dưới dạng chuỗi.',
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all());
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422); 
@@ -148,26 +131,7 @@ class UserController extends Controller
      */
     public function update($id, Request $request)
     {
-        $rules = [
-            'name' => 'String|required|min:3|max:15',
-            'email' => 'String|required|unique:users|email',
-            'password' => 'String|required',
-
-        ];
-        $messages = [
-            'name.required' => 'Tên là trường bắt buộc.',
-            'title.String' => 'Tên phải nhập kiểu chuỗi.',
-            'name.min' => 'Tên phải chứa ít nhất 3 ký tự.',
-            'name.max' => 'Tên không được vượt quá 15 ký tự.',
-            'email.String' => 'Email phải nhập kiểu chuỗi.',
-            'email.required' => 'Email là trường bắt buộc.',
-            'email.unique' => 'Email đã tồn tại',
-            'email.email' => 'Email phải đúng định dạng',
-            'password.string' => 'Mật khẩu phải nhập dưới dạng chuỗi.',
-            'password.required' => 'Mật khẩu là trường bắt buộc.',
-            // 'password.confirmed' => 'Mật khẩu xác nhận không khớp.',
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all());
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
