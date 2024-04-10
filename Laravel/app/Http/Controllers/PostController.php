@@ -71,20 +71,7 @@ class PostController extends Controller
     */
     public function store(Request $request)
     {
-        $rules = [
-            'title' => 'required|unique:posts|min:5|max:100',
-            'description' => 'required|min:10|max:50'
-        ];
-        $messages = [
-            'title.required' => 'Tiêu đề là trường bắt buộc.',
-            'title.unique' => 'Tiêu đề đã tồn tại.',
-            'title.min' => 'Tiêu đề phải chứa ít nhất 5 ký tự.',
-            'title.max' => 'Tiêu đề không được vượt quá 100 ký tự.',
-            'description.required' => 'Mô tả là trường bắt buộc.',
-            'description.min' => 'Mô tả phải chứa ít nhất 10 ký tự.',
-            'description.max' => 'Mô tả không được vượt quá 50 ký tự.'
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all());
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
@@ -151,20 +138,8 @@ class PostController extends Controller
     */
     public function update(Request $request, $id)
     {
-        $rules = [
-            'title' => 'required|unique:posts|min:5|max:100',
-            'description' => 'required|min:10|max:50'
-        ];
-        $messages = [
-            'title.required' => 'Tiêu đề là trường bắt buộc.',
-            'title.unique' => 'Tiêu đề đã tồn tại.',
-            'title.min' => 'Tiêu đề phải chứa ít nhất 5 ký tự.',
-            'title.max' => 'Tiêu đề không được vượt quá 100 ký tự.',
-            'description.required' => 'Mô tả là trường bắt buộc.',
-            'description.min' => 'Mô tả phải chứa ít nhất 10 ký tự.',
-            'description.max' => 'Mô tả không được vượt quá 50 ký tự.'
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $validator = Validator::make($request->all());
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
