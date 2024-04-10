@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Users;
+use App\Models\Phone;
 
 
 class UsersTableSeeder extends Seeder
@@ -17,20 +18,23 @@ class UsersTableSeeder extends Seeder
     {
         $users = [
             [
-                'name' => 'John Doe',
-                'email' => 'john@example.com',
-                'password' => Hash::make('password123'),
+                'name' => 'Yen',
+                'email' => 'yen@gmail.com',
+                'password' =>'12345678',
             ],
             [
-                'name' => 'Jane Smith',
-                'email' => 'jane@example.com',
-                'password' => Hash::make('password456'),
+                'name' => 'Hoai',
+                'email' => 'hoai@gmail.com',
+                'password' =>'password123',
             ],
-            // Add more users as needed
         ];
 
         foreach ($users as $user) {
-            Users::create($user);
+            $createdUser = Users::create($user);
+            Phone::create([
+                'number' => '098687656', 
+                'user_id' => $createdUser->id,
+            ]);
         }
     }
 }

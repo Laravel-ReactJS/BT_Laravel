@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Users;
+use App\Models\Phone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -22,6 +23,7 @@ class UserController extends Controller
     {
         $this->users = new Users();
     }
+
     /**
      * @OA\Get(
      *     path="/api/users",
@@ -33,8 +35,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $userList = $this->users->getAllUser();
-        return  $userList;
+        // Lấy tất cả dữ liệu từ bảng users và phones
+        $users = $this->users->getAllUsers();
+        return response()->json([
+            'success' => true,
+            'data' => $users
+        ]);
     }
     /**
      * @OA\Post(
@@ -68,14 +74,12 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all());
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422); 
-        }
-        $user = Users::create($request->all()); 
-
-        return response()->json($user, 200);
+        $userData = $request->only(['name', 'email', 'password']);
+        $user = $this->users->addUser($userData, $request->input('number'));
+        return response()->json([
+            'success' => true,
+            'data' => $user
+        ]);
     }
     
     /**
@@ -96,9 +100,13 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $getUser = DB::table('users')->where('id', $id)->get();
-        return $getUser;
+        $user = $this->users->getUser($id);
+        return response()->json([
+            'success' => true,
+            'data' => $user
+        ]);
     }
+
     /**
      * @OA\Put(
      *     path="/api/users/{id}",
@@ -129,15 +137,27 @@ class UserController extends Controller
      *     security={{"bearerAuth":{}}}
      * )
      */
-    public function update($id, Request $request)
+    public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all());
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+        $userData = $request->only(['name', 'email', 'password']);
+        $user = $this->users->updateUser($id, $userData);
+
+        // Kiểm tra và cập nhật số điện thoại nếu có
+        if ($request->has('number')) {
+            $phone = $user->phones()->firstOrCreate(['user_id' => $user->id]);
+            $phone->update(['number' => $request->input('number')]);
         }
-        $data = $request->all();
-        $updateUser = DB::table('users')->where('id', $id)->update($data);
-        return $updateUser;
+        
+        // Lấy lại thông tin người dùng sau khi cập nhật kèm theo số điện thoại
+        $user = $user->fresh();
+
+        // Thêm thông tin số điện thoại vào mảng dữ liệu người dùng
+        $userData['phone'] = $user->phones()->value('number');
+
+        return response()->json([
+            'success' => true,
+            'data' => $userData
+        ]);
     }
 
     /**
@@ -158,7 +178,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $destroyUser = DB::table('users')->where('id', $id)->delete();
-        return $destroyUser;
+        $user = $this->users->deleteUser($id);
+        return response()->json([
+            'success' => true,
+            'data' => $user
+        ]);
     }
 }
