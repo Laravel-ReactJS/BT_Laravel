@@ -22,6 +22,11 @@ class Users extends Model
         return $this->hasOne(Phone::class, 'user_id');
     }
   
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'user_id');
+    }
+
     // Phương thức tạo mới người dùng
     public function store($data)
     {

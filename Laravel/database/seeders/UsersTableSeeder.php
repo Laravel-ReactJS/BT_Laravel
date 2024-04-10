@@ -6,7 +6,6 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Users;
-use App\Models\Phone;
 
 
 class UsersTableSeeder extends Seeder
@@ -30,11 +29,8 @@ class UsersTableSeeder extends Seeder
         ];
 
         foreach ($users as $user) {
-            $createdUser = Users::create($user);
-            Phone::create([
-                'number' => '098687656', 
-                'user_id' => $createdUser->id,
-            ]);
+            Users::create($user);
         }
+    
     }
 }
